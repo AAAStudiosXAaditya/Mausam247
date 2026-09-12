@@ -1,0 +1,780 @@
+/* ==========================================================================
+   CSS Variables (Custom Properties)
+   These define our color palette and spacing for easy theme switching and consistency.
+   ========================================================================== */
+
+/* Google Font Import - Premium typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    /* Light Theme (Default) */
+    --bg-color: #f0f4ff;
+    --surface-color: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --header-bg: rgba(255, 255, 255, 0.85);
+    --border-color: #e5e7eb;
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+    --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 8px 30px -4px rgba(59, 130, 246, 0.18);
+
+    /* Typography */
+    --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 
+   Dark Theme: Triggered by data-theme="dark" on the <html> element.
+*/
+[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --surface-color: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --header-bg: rgba(15, 23, 42, 0.9);
+    --border-color: #334155;
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 8px 30px -4px rgba(59, 130, 246, 0.25);
+}
+
+/* Legacy: also support html.dark for backwards compat during transition */
+html.dark {
+    --bg-color: #0f172a;
+    --surface-color: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --header-bg: rgba(15, 23, 42, 0.9);
+    --border-color: #334155;
+}
+
+/* ==========================================================================
+   Base Reset & Global Styles
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+html {
+    scroll-behavior: smooth; /* Enables smooth scrolling for # anchor links */
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.5;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+}
+
+/* ==========================================================================
+   Header Styles
+   ========================================================================== */
+.header {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    /* Frosted glass effect */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.logo-icon {
+    color: var(--primary-color);
+}
+
+/* Navigation */
+.nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+.nav-link.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Icon Button (Theme toggle, My Location) */
+.icon-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    width: 42px;
+    height: 42px;
+}
+
+.icon-btn:hover {
+    background-color: var(--bg-color);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Main Content Layout
+   ========================================================================== */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem; /* Space between major sections */
+}
+
+.section {
+    scroll-margin-top: 80px;
+}
+
+.section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Decorative left accent bar on section headings */
+.section h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.5rem;
+    background: var(--primary-color);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* Base Card Style (Reusable for weather, search, forecast items) */
+.card {
+    background-color: var(--surface-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Search Interface Styles
+   ========================================================================== */
+.search-container {
+    position: relative; /* Important: Allows the dropdown to position relative to this container */
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    padding: 1rem;
+}
+
+.search-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-secondary);
+}
+
+#city-search {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem; /* Extra left padding for the search icon */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#city-search:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* Subtle blue glow */
+}
+
+.my-location-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.my-location-btn:hover {
+    background-color: #2563eb; /* Darker blue */
+}
+
+.my-location-btn:active {
+    transform: scale(0.95);
+}
+
+.my-location-btn i {
+    width: 20px;
+    height: 20px;
+}
+
+.search-spinner {
+    position: absolute;
+    right: 1rem;
+    color: var(--primary-color);
+    animation: spin 1s linear infinite; /* Spin animation */
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%; /* Position right below the search container */
+    left: 0;
+    right: 0;
+    margin-top: 0.5rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+    list-style: none; /* Remove bullet points */
+    z-index: 50; /* Ensure it stays above other content */
+    max-height: 300px;
+    overflow-y: auto; /* Scroll if too many results */
+}
+
+.suggestion-item {
+    padding: 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: var(--bg-color);
+}
+
+.suggestion-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.suggestion-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   Current Weather Card Styles
+   ========================================================================== */
+.current-weather-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.weather-main {
+    margin-bottom: 2rem;
+}
+
+.weather-temp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.weather-main-icon {
+    width: 64px;
+    height: 64px;
+    color: var(--primary-color);
+}
+
+.weather-temp {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.weather-condition {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.weather-city {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.weather-divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 1.5rem 0;
+}
+
+.weather-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.detail-item i {
+    color: var(--primary-color);
+    width: 20px;
+    height: 20px;
+}
+
+.detail-item span span {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Skeleton Loading Animation (Shimmer Effect)
+   ========================================================================== */
+.skeleton-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skeleton {
+    background: #e5e7eb;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    background-size: 200% 100%;
+    animation: 1.5s shine linear infinite;
+    border-radius: 8px;
+}
+
+html.dark .skeleton {
+    background: #374151;
+    background: linear-gradient(110deg, #374151 8%, #4b5563 18%, #374151 33%);
+    background-size: 200% 100%;
+}
+
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+}
+
+.skeleton-icon-temp {
+    width: 200px;
+    height: 64px;
+}
+
+.skeleton-text {
+    width: 150px;
+    height: 24px;
+}
+
+.skeleton-text-small {
+    width: 250px;
+    height: 20px;
+    margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Footer Styles
+   ========================================================================== */
+.footer {
+    background-color: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 2rem;
+}
+
+/* ==========================================================================
+   Forecast Styles
+   ========================================================================== */
+.forecast-container {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto; /* Allows horizontal scrolling on desktop */
+    padding-bottom: 1rem; /* Space for scrollbar */
+    scroll-snap-type: x mandatory;
+}
+
+/* Hide scrollbar for a cleaner look, but keep functionality */
+.forecast-container::-webkit-scrollbar {
+    height: 8px;
+}
+.forecast-container::-webkit-scrollbar-track {
+    background: var(--bg-color);
+    border-radius: 4px;
+}
+.forecast-container::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.forecast-card {
+    flex: 0 0 calc(100% / 4 - 1rem); /* Show ~4 cards at once on desktop */
+    min-width: 200px; /* Prevent them from getting too small */
+    scroll-snap-align: start;
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.forecast-day {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.forecast-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--primary-color);
+    margin: 0 auto 0.5rem auto;
+}
+
+.forecast-condition {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    height: 40px; /* Fixed height so cards stay aligned even if text wraps */
+}
+
+.forecast-temps {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.forecast-temp-min {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.forecast-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.forecast-detail-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.forecast-detail-item i {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Map Styles & Custom Weather Marker
+   ========================================================================== */
+#weather-map {
+    height: 500px;
+    width: 100%;
+    z-index: 10; /* Leaflet needs z-index to manage its internal layers */
+    padding: 0; /* Remove padding from .card so map fills it */
+    overflow: hidden;
+}
+
+/* Custom Marker Styling */
+.weather-marker {
+    background: transparent;
+    border: none;
+}
+
+.weather-marker-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--surface-color);
+    padding: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    width: 80px;
+    transform: translate(-50%, -100%); /* Centers the point of the marker */
+    text-align: center;
+    position: relative;
+}
+
+/* The little pointer arrow at the bottom of the marker */
+.weather-marker-content::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px 8px 0;
+    border-style: solid;
+    border-color: var(--surface-color) transparent transparent transparent;
+}
+
+.marker-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.marker-temp {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+}
+
+/* Map Overlay Controls */
+.overlay-btn {
+    background-color: var(--surface-color);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.overlay-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.overlay-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Responsive Design (Media Queries)
+   ========================================================================== */
+
+/* Tablet & Mobile Layout */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 0.5rem;
+    }
+
+    .nav {
+        width: 100%;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap; /* Allows wrapping if screen gets extremely small */
+    }
+
+    .theme-toggle {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+    
+    .main-content {
+        gap: 2rem;
+        padding: 1rem 0.5rem;
+    }
+    
+    /* Change horizontal scroll to vertical list on mobile */
+    .forecast-container {
+        flex-direction: column;
+        overflow-x: visible;
+    }
+    
+    .forecast-card {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: center;
+        text-align: left;
+        padding: 1rem;
+    }
+    
+    .forecast-icon {
+        margin: 0;
+    }
+    
+    .forecast-condition {
+        margin-bottom: 0;
+        height: auto;
+    }
+    
+    .forecast-temps {
+        margin-bottom: 0;
+    }
+    
+    .forecast-details {
+        align-items: flex-start;
+    }
+}
+
+/* ==========================================================================
+   Footer Styles
+   ========================================================================== */
+.footer {
+    border-top: 1px solid var(--border-color);
+    margin-top: 4rem;
+    padding: 3rem 1rem;
+    background-color: var(--surface-color);
+    text-align: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.footer-logo-icon {
+    color: var(--primary-color);
+    width: 24px;
+    height: 24px;
+}
+
+.footer-tagline {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+}
+
+.footer-credits {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.footer-credits a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer-credits a:hover {
+    text-decoration: underline;
+}

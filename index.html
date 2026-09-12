@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mausam247 - Real-time weather forecasts, interactive maps, and 7-day outlooks. Your always-on weather companion.">
+    <title>Mausam247 | Real-Time Weather</title>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="#home" class="logo">
+                <i data-lucide="cloud-sun" class="logo-icon"></i>
+                <span class="logo-text">Mausam247</span>
+            </a>
+            
+            <nav class="nav">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#map" class="nav-link">Map</a>
+                <a href="#forecast" class="nav-link">Forecast</a>
+            </nav>
+            
+            <div class="nav">
+                <button class="icon-btn" id="unit-toggle" title="Toggle Celsius/Fahrenheit">
+                    <span id="unit-text" style="font-weight: bold; font-size: 1.1rem;">°C</span>
+                </button>
+                <button class="theme-toggle icon-btn" id="theme-toggle" title="Toggle Light/Dark Mode">
+                    <i data-lucide="moon" id="theme-icon-moon"></i>
+                    <i data-lucide="sun" id="theme-icon-sun" style="display: none;"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Sections -->
+    <main class="main-content">
+        <!-- Home Section: Search & Current Weather -->
+        <section id="home" class="section">
+            <div class="search-container card">
+                <div class="search-controls">
+                    <div class="search-input-wrapper">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" id="city-search" placeholder="Search for a city..." autocomplete="off">
+                        <!-- Loading spinner (hidden by default) -->
+                        <i data-lucide="loader-circle" class="search-spinner" id="search-spinner" style="display: none;"></i>
+                    </div>
+                    <button class="my-location-btn" id="my-location-btn" title="Use my current location">
+                        <i data-lucide="navigation"></i>
+                    </button>
+                </div>
+                
+                <!-- Suggestions Dropdown -->
+                <ul class="suggestions-list" id="search-suggestions" style="display: none;">
+                    <!-- Items will be injected by JavaScript -->
+                </ul>
+            </div>
+            
+            <!-- Error Message Container -->
+            <div id="error-message" class="card" style="display: none; text-align: center; color: var(--text-primary); margin-bottom: 2rem;">
+                <i data-lucide="alert-triangle" style="color: #ef4444; width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+                <h3>Oops! Something went wrong.</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;" id="error-text">We couldn't fetch the weather right now. Please check your connection and try again.</p>
+                <button id="retry-btn" class="overlay-btn" style="margin-top: 1rem; background-color: var(--primary-color); color: white; border: none;">Try Again</button>
+            </div>
+
+            <div class="current-weather-container card" id="current-weather-card" style="display: none;">
+                <!-- Weather Data -->
+                <div id="weather-data-view">
+                    <div class="weather-main">
+                        <div class="weather-temp-container">
+                            <i data-lucide="sun" class="weather-main-icon" id="cw-icon"></i>
+                            <span class="weather-temp" id="cw-temp">--°C</span>
+                        </div>
+                        <div class="weather-condition" id="cw-condition">--</div>
+                        <div class="weather-city" id="cw-city">--</div>
+                    </div>
+                    
+                    <hr class="weather-divider">
+                    
+                    <div class="weather-details">
+                        <div class="detail-item">
+                            <i data-lucide="thermometer"></i>
+                            <span>Feels like — <span id="cw-feels-like">--°C</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <i data-lucide="droplets"></i>
+                            <span>Humidity — <span id="cw-humidity">--%</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <i data-lucide="wind"></i>
+                            <span>Wind — <span id="cw-wind">-- km/h</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <i data-lucide="cloud-rain"></i>
+                            <span>Precipitation — <span id="cw-precip">-- mm</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <i data-lucide="gauge"></i>
+                            <span>Pressure — <span id="cw-pressure">--</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skeleton Loader -->
+                <div id="weather-skeleton-view" class="skeleton-wrapper" style="display: none;">
+                    <div class="skeleton skeleton-icon-temp"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text-small"></div>
+                    <hr class="weather-divider">
+                    <div class="skeleton skeleton-text-small"></div>
+                    <div class="skeleton skeleton-text-small"></div>
+                    <div class="skeleton skeleton-text-small"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Forecast Section -->
+        <section id="forecast" class="section">
+            <h2>7-Day Forecast</h2>
+            <div class="forecast-container" id="forecast-container" style="display: none;">
+                <!-- Forecast Cards will be injected here by JavaScript -->
+            </div>
+            
+            <!-- Skeleton Loader for Forecast -->
+            <div class="forecast-container" id="forecast-skeleton-container" style="display: none;">
+                <!-- We will add 7 skeletons using JS when loading -->
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section id="map" class="section map-section">
+            <h2>Interactive Weather Map</h2>
+            
+            <!-- Map Controls -->
+            <div class="map-controls-container" style="margin-bottom: 1rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                <button class="overlay-btn active" data-overlay="none">None</button>
+                <button class="overlay-btn" data-overlay="temp">Temperature</button>
+                <button class="overlay-btn" data-overlay="rain">Rain</button>
+                <button class="overlay-btn" data-overlay="wind">Wind</button>
+            </div>
+            
+            <div class="map-container card" id="weather-map">
+                <!-- Leaflet map will render inside this div -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <i data-lucide="cloud" class="footer-logo-icon"></i>
+                <span>Mausam247</span>
+            </div>
+            <p class="footer-tagline">Real-time weather, beautifully presented.</p>
+            <div class="footer-credits">
+                <span>Weather data by <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a></span>
+                <span>Maps by <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a> &amp; <a href="https://www.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap</a></span>
+                <span>Built for learning 🌱</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>
