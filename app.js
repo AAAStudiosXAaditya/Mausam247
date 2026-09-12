@@ -457,10 +457,12 @@ function updateForecastUI(daily) {
 // We center it roughly on India to start, with a zoom level of 5.
 const map = L.map('weather-map').setView([20.5937, 78.9629], 5);
 
-// 2. Add the base map tiles (from OpenStreetMap)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// 2. Add the base map tiles through CARTO's hosted basemap service.
+// The basemap uses OpenStreetMap data without sending browser traffic to
+// the volunteer-operated OSM tile servers.
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
-    attribution: '© OpenStreetMap contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
 }).addTo(map);
 
 // 3. Create a custom marker variable (initially null)
@@ -504,22 +506,10 @@ map.on('click', async (e) => {
     const lat = e.latlng.lat;
     const lon = e.latlng.lng;
     
-    // Attempt to find the nearest city name using Nominatim (OpenStreetMap's reverse geocoder)
-    let cityName = "Selected Location";
-    try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
-        const data = await response.json();
-        
-        if (data && data.address) {
-            // Nominatim returns various fields. We try to grab the most relevant city/town/village name
-            cityName = data.address.city || data.address.town || data.address.village || data.address.state || "Selected Location";
-        }
-    } catch (error) {
-        console.error("Error reverse geocoding:", error);
-    }
-    
-    // Fetch the weather for this exact clicked coordinate!
-    fetchWeather(lat, lon, cityName);
+    // Fetch weather for the exact clicked coordinate. Avoid reverse-geocoding
+    // through Nominatim because its public service is not intended for this
+    // kind of unrestricted browser traffic.
+    fetchWeather(lat, lon, "Selected Location");
 });
 
 // --- Stage 10: Device Location ("My Location") ---
@@ -553,28 +543,16 @@ function getUserLocation(autoFetchWeather = false) {
             // Remove spinning effect
             icon.classList.remove('search-spinner');
             
-            // Try to find the city name using Reverse Geocoding
-            let cityName = "My Location";
-            try {
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
-                const data = await response.json();
-                if (data && data.address) {
-                    cityName = data.address.city || data.address.town || data.address.village || data.address.state || "My Location";
-                }
-            } catch (error) {
-                console.error("Error reverse geocoding:", error);
-            }
-            
             // Update search input text
-            searchInput.value = cityName;
+            searchInput.value = "My Location";
             
             if (autoFetchWeather) {
                 // If it's the first launch, fetch everything
-                fetchWeather(lat, lon, cityName);
+                fetchWeather(lat, lon, "My Location");
             } else {
                 // If they just clicked the button, only move the map and show a basic marker (no temp yet)
                 // We'll pass a default temperature of 0 and a default icon until they click the map or search
-                updateMapLocation(lat, lon, cityName, 0, "map-pin");
+                updateMapLocation(lat, lon, "My Location", 0, "map-pin");
             }
         },
         (error) => {
