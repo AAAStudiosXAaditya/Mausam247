@@ -457,12 +457,12 @@ function updateForecastUI(daily) {
 // We center it roughly on India to start, with a zoom level of 5.
 const map = L.map('weather-map').setView([20.5937, 78.9629], 5);
 
-// 2. Add the base map tiles through CARTO's hosted basemap service.
-// The basemap uses OpenStreetMap data without sending browser traffic to
-// the volunteer-operated OSM tile servers.
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+// 2. Add a public basemap hosted by Esri.
+// This avoids sending tile traffic directly to the volunteer-operated OSM
+// tile servers and does not require an application API key.
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
     maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, USGS, and other contributors'
 }).addTo(map);
 
 // 3. Create a custom marker variable (initially null)
